@@ -3,7 +3,11 @@
 
 
 This is the repository for the NovoLign pipeline, as described in:<br>
-"NovoLign: metaproteomics by sequence alignment" 
+"Kleikamp, Hugo BC, et al. "NovoLign: metaproteomics by sequence alignment." ISME communications 4.1 (2024): ycae121." 
+
+This github page will be continuously updated. To use the original NovoLign version as was published, 
+please refer to the archived github page:
+https://github.com/hbckleikamp/NovoLign-Publication-
 
 
 The pipeline was established and tested with shotgun proteomics and metaproteomics data obtained from different projectss. The measurments were performed using Orbitrap mass spectrometers, de novo sequence lists were generated using PEAKS Studio. The generation of accurate de novo peptide sequence lists depends on high quality peptide sequencing spectra. NovoLign has been tested and developed using the Anaconda Spyder environment.
@@ -41,20 +45,86 @@ The NovoLign pipeline consists of 5 parts:
 After determining the best-performing parameter combinations for the NovoLign pipeline using synthetic communities, we evaluated its general practicability by studying a range of pure reference strains, enrichment cultures, and complex microbial communities. In addition to determining microbial composition using de novo sequence alignment, we analyzed for all experiments the fraction of high-quality fragmentation spectra that were matched during database searching. This provides an measure for the unmatched fraction during database searching, and therefore, for the completeness of the reference sequence databases used for database searching. De novo sequence alignment of the unmatched spectra moreover determines whether there are any taxonomies that are not covered by the reference sequence database used for database searching. Finally, the pipeline enables to construct a de novo focused UniRef100 reference sequence databases from the taxonomic composition determined by sequence alignment.
 
 
-#### Running NovoLign 
-- NovoLign is designed as a single "tunable" python script.
-- NovoLign does not offer command line options, but parameters can be altered in the main script.
+#### Running NovoLign ####
+NovoLign can be run in two ways:
+1.Executing Novolign from command line
+Here arguments are supplied in the command line.
 
+2.Executing NovoLign directly from the most recent script (NovoLign_workflow_v27112024.py).
+Here filepaths are changed manually each time in the script.
 
-
-#### What input files does it use? 
 NovoLign is tested to work with .psm output formats from PEAKS de novo sequencing and DeepNovo.
 Any tabular or .txt-like format can be supplied, provided it contains a column of peptide sequences with the header `Peptide`.
-For each folder, the required files are identified with the following syntax:
+If an "input folder" is supplied , its contents should adhere to the following structure (See Example: Input_p_Yeast)
 - de_novo_file=..\\*de novo* *peptides.csv
 - database_searching_file=..\\*psm.csv
 - fasta_database=..\\*.fasta (used in database qc only)
 - taxa=..\\*TaxIDs.txt (used in database qc only)
+
+### Execute Novolign from command line ###
+
+#add some example commands
+
+|Argument      |Default value| Description|
+|-----------------|:-----------:|---------------|
+|-i| n.a. | Required, --input_file: one or more comma separated filepaths (or an input folder with NovoLign folder structure) |
+|-d| n.a. | Required, --diamond_database_path: Path to DIAMOND database used for alignment |
+|-o| n.a. | Optional, --Output_directory: Path to output folder|
+
+|Argument      |Default value| Description|
+|-----------------|:-----------:|---------------|
+|-ALC| 70 | Optional, --min_ALC_score: Minimum ALC score (PEAKS specific score)|
+|-bit| 25 | Optional, -min_bit_score: Minimum bitscore (DIAMOND alignment score)|
+|-freq| 5 | Optional, --freq_cut: Minium taxa frequency for denoising|
+|-lcas| ['lca','bitlca','wcla'] | Optional, which lca algorithms to use: lca (conventional lca), bitlca (bistcore weighted lca), wlca (weighted lca)|
+
+|Argument      |Default value| Description|
+|-----------------|:-----------:|---------------|
+|-f| n.a. | Optional, --fasta_database_path: Path to fasta database (required for database construction) |
+|-DBwrite| "Proteins" | Optional, Used only when -f is defined for database construction. Options: (False, 'Proteins','Taxids'): do not make a database(False), use aligned proteins ('Proteins') use aligned taxids('Taxids').|
+|-DB_rank| "genus" | Optional, Used only in database construction with -DBwrite 'Taxids', selects the taxonomic rank for database construction, Options: 'OX' 'species' 'genus' or 'family' |
+
+|Argument      |Default value| Description|
+|-----------------|:-----------:|---------------|
+|-di| n.a. | Optional, --database_searching_file: database searching file, for comparison with de novo sequenced peptides, should be tabular and contain the column 'Peptide' |
+|-taxa| n.a. | Optional, Specified taxa for the visual comparison of database searching and de novo sequencing outputs |
+|-o| n.a. | Optional, --Output_directory: Path to output folder|
+
+
+
+|Argument      |Default value| Description|
+|-----------------|:-----------:|---------------|
+|diamond_path| ..\NovoLign\Setup\diamond\diamond.exe |Location of DIAMOND executable|
+|diamond_folder| ..\NovoLign\Setup\diamond\ |Location of DIAMOND folder|
+|Temporary_directory| ..\NovoLign\ |    Folder for writing temporary DIAMOND indices |
+|ncbi_taxonomy_path|  ..\NovoLign\Setup\ncbi_taxonomy\parsed_ncbi_taxonomy.tsv|Location of linear NCBI taxonomy|        
+
+
+
+
+#Optional: Database construction
+parser.add_argument("-f", "--fasta_database_path", required = False, default="", help="Required for database construction: Path to fasta database")  
+parser.add_argument("-DBwrite", "--Write_to_database", required = False, default="Proteins", 
+                    help="Required for database construction. Options: (False, 'Proteins','Taxids'): do not make a database(False), use aligned proteins ('Proteins') use aligned taxids('Taxids').")  
+
+parser.add_argument("-DB_rank", required = False, default="genus",
+                    help="Used in database construction with -DBwrite 'Taxids', selects the taxonomic rank for database construction, Options: 'OX' 'species' 'genus' or 'family'")
+
+
+#Optional: Comparison with database searching file
+
+
+
+#default filepaths
+parser.add_argument("-diamond_path",   required = False, help="path to diamond executable", default=str(Path(basedir,"Setup","diamond","diamond.exe"))) 
+parser.add_argument("-diamond_folder", required = False, help="path to diamond exeutable folder", default=str(Path(basedir,"Setup","diamond")))
+parser.add_argument("-ncbi_taxonomy_path", required = False, help="path to ncbi taxonomy file", default=str(Path(basedir,"Setup","ncbi_taxonomy","parsed_ncbi_taxonomy.tsv")))  
+parser.add_argument("-Temporary_directory", required = False, help="Temporary directory for writing DIAMOND index files", default=basedir) 
+
+
+
+### Execute Novolign by running script ###
+
 
 Examples of input files are supplied in the folder `Input_p_yeast`
 <br>
