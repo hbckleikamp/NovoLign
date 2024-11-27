@@ -46,7 +46,7 @@ After determining the best-performing parameter combinations for the NovoLign pi
 
 
 #### Running NovoLign ####
-NovoLign can be run in two ways:
+NovoLign can be run in two ways<br>:
 1.Executing Novolign from command line
 Here arguments are supplied in the command line.
 
