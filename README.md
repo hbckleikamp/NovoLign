@@ -172,7 +172,7 @@ Example output vizualisation for database quality control, which compares the ta
 The pipeline is licensed with standard MIT-license. <br>
 If you would like to use this pipeline in your research, please cite the following papers: 
       
-- Kleikamp, Hugo BC, et al. "NovoLign: metaproteomic profiling by de novo sequence alignment" bioRxiv (2024).<br>         
+- Kleikamp, Hugo BC, et al. "NovoLign: metaproteomics by sequence alignment." ISME communications 4.1 (2024): ycae121..<br>         
 
 - Kleikamp, Hugo BC, et al. "Database-independent de novo metaproteomics of complex microbial communities." Cell Systems 12.5 (2021): 375-383.
 
