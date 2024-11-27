@@ -5,7 +5,7 @@
 This is the archived repository for the NovoLign pipeline, as described in:<br>
 "Kleikamp, Hugo BC, et al. "NovoLign: metaproteomics by sequence alignment." ISME communications 4.1 (2024): ycae121." 
 <br>**To see a more updated version, including command line usage, check out:**
-https://github.com/hbckleikamp/NovoLign<br>
+https://github.com/pabstm/NovoLign<br>
 
 The pipeline was established and tested with shotgun proteomics and metaproteomics data obtained from different projectss. The measurments were performed using Orbitrap mass spectrometers, de novo sequence lists were generated using PEAKS Studio. The generation of accurate de novo peptide sequence lists depends on high quality peptide sequencing spectra. NovoLign has been tested and developed using the Anaconda Spyder environment.
 It is highly recommended to use Python package versions as specified in the "NovoLign_requirements_17032024" text file to ensure smooth operation of the pipeline. Newer versions may lead to inconsistent outcomes and unexpected errors.
