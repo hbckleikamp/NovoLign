@@ -47,10 +47,10 @@ After determining the best-performing parameter combinations for the NovoLign pi
 
 #### Running NovoLign ####
 NovoLign can be run in two ways:<br>
-1.Executing Novolign from command line
+1.Executing Novolign from command line: <br>
 Here arguments are supplied in the command line.
-<br>
-2.Executing NovoLign directly from the most recent script (NovoLign_workflow_v27112024.py).<br>
+<br><br>
+2.Executing NovoLign directly from the most recent script (NovoLign_workflow_v27112024.py):<br>
 Here filepaths are changed manually each time in the script.
 
 NovoLign is tested to work with .psm output formats from PEAKS de novo sequencing and DeepNovo.
