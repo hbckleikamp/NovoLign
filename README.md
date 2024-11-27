@@ -65,6 +65,15 @@ If an "input folder" is supplied , its contents should adhere to the following s
 
 #add some example commands
 
+python "F:/nr/NovoLign-main/NovoLign_CLI.py"
+
+```
+function test() {
+  console.log("This code will have a copy button to the right of it");
+}
+```
+
+
 <br>**Main arguments**
 |Argument      |Default value| Description|
 |-----------------|:-----------:|---------------|
