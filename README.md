@@ -165,35 +165,6 @@ Example output vizualisation for database quality control, which compares the ta
 <br clear="left"/>
 
 
-## Parameter options 
-Parameters can be freely changed within the main script.
-There are several parameters that can be changed to include more stringent filtering for de novo peptides.
-
-
-Path parameters specify which databases should be used. 
-|Parameter        |Default value| Description|
-|-----------------|:-----------:|---------------|
-|input_files| ..\NovoLign\Input_| Location of input folder
-|diamond_path| ..\NovoLign\Setup\diamond\diamond.exe |Location of DIAMOND executable|
-|diamond_folder| ..\NovoLign\Setup\diamond\ |Location of DIAMOND folder|
-|Temporary_directory| ..\NovoLign\ |    Folder for writing temporary DIAMOND indices |
-|ncbi_taxonomy_path|  ..\NovoLign\Setup\ncbi_taxonomy\parsed_ncbi_taxonomy.tsv|Location of linear NCBI taxonomy|        
-|fasta_database_path  ||Location of database fasta file|
-|diamond_database_path||Location of database dmnd file|
-
-<br>
-Other parameters specify cutoffs for de novo score, alignment score and taxon frequency, as how use NovoLign to perform database construction.
-
-|Parameter        |Default value| Description|
-|-----------------|:-----------:|---------------|
-|min_ALC_score| 70 |               numeric, minimum required ALC score (for PEAKS de novo files), ensures that only high quality sequences are aligned|
-|bit | 25 |                   numeric, minimum bitscore of alignments, which are further processed for determining taxonomic composition|
-|freq_cut|5 or 15 |                     numeric, minimum taxon (or lineage) reporting frequency threshold for reporting microbial composition and DB creation. The higher value 15 will remove very low abundant taxonomies from the composition report|
-|Write_to_database| "Proteins"| do not make a database(False), use aligned proteins ("Proteins") use aligned taxids("Taxids").|
-|DB_rank|"genus"|                 rank specificity  ("OX" "species" "genus" or "family") if "Taxids" is used for Write_to_database |
-
-<br>
-
 
 
 #### Licensing
