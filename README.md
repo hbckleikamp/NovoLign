@@ -63,7 +63,7 @@ If an "input folder" is supplied , its contents should adhere to the following s
 
 ### Execute Novolign from command line ###
 
-#example commands (after running Setup.py):
+Example commands, executed from the NovoLign directory after running Setup.py:
 
 Base NovoLign usage (just alignment and LCA)
 ```
