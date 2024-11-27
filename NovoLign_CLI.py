@@ -48,7 +48,7 @@ parser.add_argument("-o", "--Output_directory", default="", required = False, he
 
 #Performance parameters
 parser.add_argument("-ALC", "--min_ALC_score", required = False, default=70,  help="Minimum ALC score (PEAKS specific score)") 
-parser.add_argument("--bit", "-min_bit_score", required = False, default=25,  help="Minimum bitscore (DIAMOND alignment score)") 
+parser.add_argument("-bit", "-min_bit_score", required = False, default=25,  help="Minimum bitscore (DIAMOND alignment score)") 
 parser.add_argument("-freq", "--freq_cut",     required = False, default=5,   help="Minium taxa frequency for denoising") 
 parser.add_argument("-lcas", required = False, default=['lca','bitlca','wcla'],   help="Wich LCA algorithm to use") 
 
