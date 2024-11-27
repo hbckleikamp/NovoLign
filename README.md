@@ -63,18 +63,23 @@ If an "input folder" is supplied , its contents should adhere to the following s
 
 ### Execute Novolign from command line ###
 
-#add some example commands
+#example commands (after running Setup.py):
 
-python "F:/nr/NovoLign-main/NovoLign_CLI.py"
+Base NovoLign usage (just alignment and LCA)
+```
+python "NovoLign_CLI.py" -i "Input_p_Yeast/de novo peptides.csv" -d "Setup/Swiss-Prot/uniprot_sprot_NoAmb_IJeqL.dmnd"
+```
 
+With database construction:
 ```
-function test() {
-  console.log("This code will have a copy button to the right of it");
-}
+python "NovoLign_CLI.py" -i "Input_p_Yeast/de novo peptides.csv" -d "Setup/Swiss-Prot/uniprot_sprot_NoAmb_IJeqL.dmnd" -f "Setup/Swiss-Prot/uniprot_sprot_NoAmb_IJeqL.fasta"
 ```
+
+With comparison to database searching output:
 ```
-hoi
+python "NovoLign_CLI.py" -i "Input_p_Yeast/de novo peptides.csv" -di "Input_p_Yeast/DB search psm.csv" -d "Setup/Swiss-Prot/uniprot_sprot_NoAmb_IJeqL.dmnd" 
 ```
+
 
 <br>**Main arguments**
 |Argument      |Default value| Description|
