@@ -65,12 +65,14 @@ If an "input folder" is supplied , its contents should adhere to the following s
 
 #add some example commands
 
+<br>**Main arguments**
 |Argument      |Default value| Description|
 |-----------------|:-----------:|---------------|
 |-i| n.a. | Required, --input_file: one or more comma separated filepaths (or an input folder with NovoLign folder structure) |
 |-d| n.a. | Required, --diamond_database_path: Path to DIAMOND database used for alignment |
 |-o| n.a. | Optional, --Output_directory: Path to output folder|
 
+<br>**Performance arguments**
 |Argument      |Default value| Description|
 |-----------------|:-----------:|---------------|
 |-ALC| 70 | Optional, --min_ALC_score: Minimum ALC score (PEAKS specific score)|
@@ -78,20 +80,21 @@ If an "input folder" is supplied , its contents should adhere to the following s
 |-freq| 5 | Optional, --freq_cut: Minium taxa frequency for denoising|
 |-lcas| ['lca','bitlca','wcla'] | Optional, which lca algorithms to use: lca (conventional lca), bitlca (bistcore weighted lca), wlca (weighted lca)|
 
+<br>**Database construction**
 |Argument      |Default value| Description|
 |-----------------|:-----------:|---------------|
 |-f| n.a. | Optional, --fasta_database_path: Path to fasta database (required for database construction) |
 |-DBwrite| "Proteins" | Optional, Used only when -f is defined for database construction. Options: (False, 'Proteins','Taxids'): do not make a database(False), use aligned proteins ('Proteins') use aligned taxids('Taxids').|
 |-DB_rank| "genus" | Optional, Used only in database construction with -DBwrite 'Taxids', selects the taxonomic rank for database construction, Options: 'OX' 'species' 'genus' or 'family' |
 
+<br>**Database searching comparison**
 |Argument      |Default value| Description|
 |-----------------|:-----------:|---------------|
 |-di| n.a. | Optional, --database_searching_file: database searching file, for comparison with de novo sequenced peptides, should be tabular and contain the column 'Peptide' |
 |-taxa| n.a. | Optional, Specified taxa for the visual comparison of database searching and de novo sequencing outputs |
 |-o| n.a. | Optional, --Output_directory: Path to output folder|
 
-
-
+<br>**Default filepaths**
 |Argument      |Default value| Description|
 |-----------------|:-----------:|---------------|
 |diamond_path| ..\NovoLign\Setup\diamond\diamond.exe |Location of DIAMOND executable|
@@ -102,30 +105,11 @@ If an "input folder" is supplied , its contents should adhere to the following s
 
 
 
-#Optional: Database construction
-parser.add_argument("-f", "--fasta_database_path", required = False, default="", help="Required for database construction: Path to fasta database")  
-parser.add_argument("-DBwrite", "--Write_to_database", required = False, default="Proteins", 
-                    help="Required for database construction. Options: (False, 'Proteins','Taxids'): do not make a database(False), use aligned proteins ('Proteins') use aligned taxids('Taxids').")  
-
-parser.add_argument("-DB_rank", required = False, default="genus",
-                    help="Used in database construction with -DBwrite 'Taxids', selects the taxonomic rank for database construction, Options: 'OX' 'species' 'genus' or 'family'")
-
-
-#Optional: Comparison with database searching file
-
-
-
-#default filepaths
-parser.add_argument("-diamond_path",   required = False, help="path to diamond executable", default=str(Path(basedir,"Setup","diamond","diamond.exe"))) 
-parser.add_argument("-diamond_folder", required = False, help="path to diamond exeutable folder", default=str(Path(basedir,"Setup","diamond")))
-parser.add_argument("-ncbi_taxonomy_path", required = False, help="path to ncbi taxonomy file", default=str(Path(basedir,"Setup","ncbi_taxonomy","parsed_ncbi_taxonomy.tsv")))  
-parser.add_argument("-Temporary_directory", required = False, help="Temporary directory for writing DIAMOND index files", default=basedir) 
 
 
 
 ### Execute Novolign by running script ###
-
-
+This requires manually editing filepaths to your input folder and diamond database in recent script (NovoLign_workflow_v27112024.py).
 Examples of input files are supplied in the folder `Input_p_yeast`
 <br>
 
