@@ -20,7 +20,35 @@ from pathlib import Path
 import pandas as pd
 import numpy as np
 
-#%% iteratively construct taxonomies from nodes.dmp
+
+#%% #use preconstructed lineages
+def parse_new_NCBI_taxonomy(lineages,
+                            Dump_keywords=[" bacterium"," archaeon", "unclassified","uncultured","unidentified","environmental samples"],
+                            path=False):
+    
+    
+    #add read in chunk option?
+    
+    if not path: path=str(Path(basedir,"ncbi_taxonomy"))    
+    if not os.path.exists(path): os.mkdir(path)
+    
+    ndf=pd.read_csv(lineages,sep="\t",header=None).iloc[:,::2]
+    
+    ranks=["superkingdom","phylum","class","order","family","genus","species"]
+    ndf.columns=["OX","OS",'species', 'genus', 'family', 'order', 'class', 'phylum',"kingdom", 'superkingdom']
+    ndf=ndf[["OX","OS"]+ranks]
+    ndf["Dump_taxid"]=False
+    ndf.loc[np.vstack([ndf.OS.str.contains(i).values for i in Dump_keywords]).T.sum(axis=1).astype(bool),"Dump_taxid"]=True
+    
+
+
+    outfile=str(Path(path,"parsed_ncbi_taxonomy.tsv"))
+    ndf.to_csv(outfile ,sep="\t")
+    
+    return outfile
+
+
+#%% #contruct lineages from names & nodes
 def parse_NCBI_taxonomy(names,nodes,
                         
                         ranks=["superkingdom","phylum","class","order","family","genus","species"],
