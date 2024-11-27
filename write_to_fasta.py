@@ -9,7 +9,6 @@ import numpy as np
 import re, random
 from collections import Counter
 import os
-import warnings
 
 # add decoy peptides        
 def scramble(x):
@@ -37,42 +36,8 @@ def con_csv(peaksfiles):
     return(df)
 
 
-#read table with dynamic delmiter detection
-def read_table(tabfile, *,
-               Keyword="Peptide",
-               ):
-
-    with warnings.catch_warnings():
-        warnings.filterwarnings("ignore")
-
-        try:
-            tab = pd.read_excel(tabfile, engine='openpyxl')
-        except:
-            with open(tabfile, "r") as f:
-                tab = pd.DataFrame(f.read().splitlines())
-
-        # dynamic delimiter detection: if file delimiter is different, split using different delimiters until the desired column name is found
-        if Keyword:
-            if Keyword not in tab.columns:
-                delims = [i[0] for i in Counter(
-                    [i for i in str(tab.iloc[0]) if not i.isalnum()]).most_common()]
-                for delim in delims:
-                    if delim == " ":
-                        delim = "\s"
-                    try:
-                        tab = pd.read_csv(tabfile, sep=delim)
-                        if Keyword in tab.columns:
-                            return tab
-                    except:
-                        pass
-
-    return tab
-
-
 # universl peaks and deepnovo conversion
-def write_to_fasta(de_novo_file,
-                   Output_directory,          # str: one  novo sequencing output file (full filepath), in .csv or .tsv format
-                   database_searching_file="",
+def write_to_fasta(de_novo_file,database_searching_file,Output_directory,          # str: one  novo sequencing output file (full filepath), in .csv or .tsv format
                    base_ALC_Score_cut=40,             # numeric: mininum required score cutoff (PEAKS score, ALC(%))
                    Deepnovo_Score_cutoff=-0.1,         # numeric: mininum required score cutoff (DeepNovo score)
                    ppm_cutoff=None,                    # numeric: maximum ppm tolerance (absolute)
@@ -89,7 +54,20 @@ def write_to_fasta(de_novo_file,
                    ): 
 
  
-    df=read_table(de_novo_file)
+    # dynamic delimiter detection
+    if de_novo_file.endswith('.csv'):
+        df=pd.read_csv(de_novo_file,sep=",")
+        if "Peptide" not in df.columns: 
+            delims=[i[0] for i in Counter([i for i in str(df.iloc[0]) if not i.isalnum()]).most_common()]
+            for delim in delims:
+                if delim==" ": sep="\s"
+                try:
+                    df=pd.read_csv(de_novo_file,sep=delim)
+                    if "Peptide" in df.columns:
+                        break
+                except:
+                    pass   
+    if de_novo_file.endswith('.tsv'): df=pd.read_csv(de_novo_file,sep="\t")
     
     # convert Deepnovo output to PEAKS output format    
     if "predicted_sequence" in df.columns: df=format_DeepNovo(df)
@@ -155,7 +133,7 @@ def write_to_fasta(de_novo_file,
     with open(out_path_all,"w") as f:
         f.write("\n".join([heads[ix]+"\n"+peptide for ix,peptide in enumerate(df["Peptide"])])+"\n")
 
-    if len(database_searching_file):
+    if database_searching_file!=None:
         db_df=pd.read_csv(database_searching_file)
         
         #de novo only scans, de novo only precursors

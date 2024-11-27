@@ -2,13 +2,10 @@
 
 
 
-This is the repository for the NovoLign pipeline, as described in:<br>
+This is the archived repository for the NovoLign pipeline, as described in:<br>
 "Kleikamp, Hugo BC, et al. "NovoLign: metaproteomics by sequence alignment." ISME communications 4.1 (2024): ycae121." 
-
-This github page will be continuously updated. To use the original NovoLign version as was published, 
-please refer to the archived github page:
-https://github.com/hbckleikamp/NovoLign-Publication-
-
+<br>**To see a more updated version, including command line usage, check out:**
+https://github.com/hbckleikamp/NovoLign<br>
 
 The pipeline was established and tested with shotgun proteomics and metaproteomics data obtained from different projectss. The measurments were performed using Orbitrap mass spectrometers, de novo sequence lists were generated using PEAKS Studio. The generation of accurate de novo peptide sequence lists depends on high quality peptide sequencing spectra. NovoLign has been tested and developed using the Anaconda Spyder environment.
 It is highly recommended to use Python package versions as specified in the "NovoLign_requirements_17032024" text file to ensure smooth operation of the pipeline. Newer versions may lead to inconsistent outcomes and unexpected errors.
@@ -45,87 +42,21 @@ The NovoLign pipeline consists of 5 parts:
 After determining the best-performing parameter combinations for the NovoLign pipeline using synthetic communities, we evaluated its general practicability by studying a range of pure reference strains, enrichment cultures, and complex microbial communities. In addition to determining microbial composition using de novo sequence alignment, we analyzed for all experiments the fraction of high-quality fragmentation spectra that were matched during database searching. This provides an measure for the unmatched fraction during database searching, and therefore, for the completeness of the reference sequence databases used for database searching. De novo sequence alignment of the unmatched spectra moreover determines whether there are any taxonomies that are not covered by the reference sequence database used for database searching. Finally, the pipeline enables to construct a de novo focused UniRef100 reference sequence databases from the taxonomic composition determined by sequence alignment.
 
 
-#### Running NovoLign ####
-NovoLign can be run in two ways:<br><br>
-1.Executing Novolign from command line: 
-Here arguments are supplied in the command line.
-<br><br>
-2.Executing NovoLign directly from the most recent script (NovoLign_workflow_v27112024.py):
-Here filepaths are changed manually each time in the script.
+#### Running NovoLign 
+- NovoLign is designed as a single "tunable" python script.
+- NovoLign does not offer command line options, but parameters can be altered in the main script.
 
+
+
+#### What input files does it use? 
 NovoLign is tested to work with .psm output formats from PEAKS de novo sequencing and DeepNovo.
 Any tabular or .txt-like format can be supplied, provided it contains a column of peptide sequences with the header `Peptide`.
-If an "input folder" is supplied , its contents should adhere to the following structure (See Example: Input_p_Yeast)
+For each folder, the required files are identified with the following syntax:
 - de_novo_file=..\\*de novo* *peptides.csv
 - database_searching_file=..\\*psm.csv
 - fasta_database=..\\*.fasta (used in database qc only)
 - taxa=..\\*TaxIDs.txt (used in database qc only)
 
-### Execute Novolign from command line ###
-
-Example commands, executed from the NovoLign directory after running Setup.py:
-
-Base NovoLign usage (just alignment and LCA)
-```
-python "NovoLign_CLI.py" -i "Input_p_Yeast/de novo peptides.csv" -d "Setup/Swiss-Prot/uniprot_sprot_NoAmb_IJeqL.dmnd"
-```
-
-With database construction:
-```
-python "NovoLign_CLI.py" -i "Input_p_Yeast/de novo peptides.csv" -d "Setup/Swiss-Prot/uniprot_sprot_NoAmb_IJeqL.dmnd" -f "Setup/Swiss-Prot/uniprot_sprot_NoAmb_IJeqL.fasta"
-```
-
-With comparison to database searching output:
-```
-python "NovoLign_CLI.py" -i "Input_p_Yeast/de novo peptides.csv" -di "Input_p_Yeast/DB search psm.csv" -d "Setup/Swiss-Prot/uniprot_sprot_NoAmb_IJeqL.dmnd" 
-```
-
-
-<br>**Main arguments**
-|Argument      |Default value| Description|
-|-----------------|:-----------:|---------------|
-|-i| n.a. | Required, --input_file: one or more comma separated filepaths (or an input folder with NovoLign folder structure) |
-|-d| n.a. | Required, --diamond_database_path: Path to DIAMOND database used for alignment |
-|-o| n.a. | Optional, --Output_directory: Path to output folder|
-
-<br>**Performance arguments**
-|Argument      |Default value| Description|
-|-----------------|:-----------:|---------------|
-|-ALC| 70 | Optional, --min_ALC_score: Minimum ALC score (PEAKS specific score)|
-|-bit| 25 | Optional, -min_bit_score: Minimum bitscore (DIAMOND alignment score)|
-|-freq| 5 | Optional, --freq_cut: Minium taxa frequency for denoising|
-|-lcas| ['lca','bitlca','wcla'] | Optional, which lca algorithms to use: lca (conventional lca), bitlca (bistcore weighted lca), wlca (weighted lca)|
-
-<br>**Database construction**
-|Argument      |Default value| Description|
-|-----------------|:-----------:|---------------|
-|-f| n.a. | Optional, --fasta_database_path: Path to fasta database (required for database construction) |
-|-DBwrite| "Proteins" | Optional, Used only when -f is defined for database construction. Options: (False, 'Proteins','Taxids'): do not make a database(False), use aligned proteins ('Proteins') use aligned taxids('Taxids').|
-|-DB_rank| "genus" | Optional, Used only in database construction with -DBwrite 'Taxids', selects the taxonomic rank for database construction, Options: 'OX' 'species' 'genus' or 'family' |
-
-<br>**Database searching comparison**
-|Argument      |Default value| Description|
-|-----------------|:-----------:|---------------|
-|-di| n.a. | Optional, --database_searching_file: database searching file, for comparison with de novo sequenced peptides, should be tabular and contain the column 'Peptide' |
-|-taxa| n.a. | Optional, Specified taxa for the visual comparison of database searching and de novo sequencing outputs |
-|-o| n.a. | Optional, --Output_directory: Path to output folder|
-
-<br>**Default filepaths**
-|Argument      |Default value| Description|
-|-----------------|:-----------:|---------------|
-|diamond_path| ..\NovoLign\Setup\diamond\diamond.exe |Location of DIAMOND executable|
-|diamond_folder| ..\NovoLign\Setup\diamond\ |Location of DIAMOND folder|
-|Temporary_directory| ..\NovoLign\ |    Folder for writing temporary DIAMOND indices |
-|ncbi_taxonomy_path|  ..\NovoLign\Setup\ncbi_taxonomy\parsed_ncbi_taxonomy.tsv|Location of linear NCBI taxonomy|        
-
-
-
-
-
-
-
-### Execute Novolign by running script ###
-This requires manually editing filepaths to your input folder and diamond database in recent script (NovoLign_workflow_v27112024.py).
 Examples of input files are supplied in the folder `Input_p_yeast`
 <br>
 
@@ -164,6 +95,35 @@ Example output vizualisation for database quality control, which compares the ta
 </p>
 <br clear="left"/>
 
+
+## Parameter options 
+Parameters can be freely changed within the main script.
+There are several parameters that can be changed to include more stringent filtering for de novo peptides.
+
+
+Path parameters specify which databases should be used. 
+|Parameter        |Default value| Description|
+|-----------------|:-----------:|---------------|
+|input_files| ..\NovoLign\Input_| Location of input folder
+|diamond_path| ..\NovoLign\Setup\diamond\diamond.exe |Location of DIAMOND executable|
+|diamond_folder| ..\NovoLign\Setup\diamond\ |Location of DIAMOND folder|
+|Temporary_directory| ..\NovoLign\ |    Folder for writing temporary DIAMOND indices |
+|ncbi_taxonomy_path|  ..\NovoLign\Setup\ncbi_taxonomy\parsed_ncbi_taxonomy.tsv|Location of linear NCBI taxonomy|        
+|fasta_database_path  ||Location of database fasta file|
+|diamond_database_path||Location of database dmnd file|
+
+<br>
+Other parameters specify cutoffs for de novo score, alignment score and taxon frequency, as how use NovoLign to perform database construction.
+
+|Parameter        |Default value| Description|
+|-----------------|:-----------:|---------------|
+|min_ALC_score| 70 |               numeric, minimum required ALC score (for PEAKS de novo files), ensures that only high quality sequences are aligned|
+|bit | 25 |                   numeric, minimum bitscore of alignments, which are further processed for determining taxonomic composition|
+|freq_cut|5 or 15 |                     numeric, minimum taxon (or lineage) reporting frequency threshold for reporting microbial composition and DB creation. The higher value 15 will remove very low abundant taxonomies from the composition report|
+|Write_to_database| "Proteins"| do not make a database(False), use aligned proteins ("Proteins") use aligned taxids("Taxids").|
+|DB_rank|"genus"|                 rank specificity  ("OX" "species" "genus" or "family") if "Taxids" is used for Write_to_database |
+
+<br>
 
 
 

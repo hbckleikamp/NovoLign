@@ -16,7 +16,6 @@ from setup_NCBI_taxonomy import *
 from prep_Database import *
 from make_DIAMOND_database import *
 
-
 #%% Set execution
 
 
@@ -41,12 +40,9 @@ if download_DIAMOND:
 
 if download_ncbi_taxonomy:
     print("Setting up NCBI taxonomy")
-    # names,nodes=download_ncbi_taxdump(path=False)
-    # ncbi_taxonomy_path=parse_NCBI_taxonomy(names,nodes)
-    
-    #updated with new ncbi taxdump
-    names,lineages=names,nodes=download_new_ncbi_taxdump(path=False)
-    ncbi_taxonomy_path=parse_new_NCBI_taxonomy(lineages)
+    names,nodes=download_ncbi_taxdump(path=False)
+    ncbi_taxonomy_path=parse_NCBI_taxonomy(names,nodes)
+
     
 #%% Step 3: Setup Diamond database
 
@@ -57,11 +53,7 @@ if download_database:
 if construct_DIAMOND_database:
     print("constructing DIAMOND database : " +db)
     merged_database=merge_files(fasta_files,delete_old=False)
-    prepped_database=prep_database(merged_database,
-                                   Path_to_taxonomy=ncbi_taxonomy_path,   
-                                   Path_to_synonyms=names,
-                                   db=db,
-                                   delete_old=False)
+    prepped_database=prep_database(merged_database,delete_old=False)
     diamond_database_path=make_diamond_database(diamond_path,database_path=prepped_database,output_path=False,delete_old=False)
 
 #%% Step 4: Write filepaths to file

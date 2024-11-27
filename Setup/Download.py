@@ -131,7 +131,6 @@ def download_db(DB,path=False):
     #NCBI NR
     if DB=="NCBI_NR":
         urls=requests.get("https://ftp.ncbi.nlm.nih.gov/blast/db/nr-prot-metadata.json").json().get("files")
-        #alternative link https://ftp.ncbi.nlm.nih.gov/blast/db/FASTA/nr.gz 
         if not path: path=str(Path(basedir,"NCBI_NR"))
     
     #Swiss-Prot
@@ -169,22 +168,6 @@ def download_db(DB,path=False):
     
     
     return fasta_files
-
-
-def download_new_ncbi_taxdump(path=False):
-
-    urls="https://ftp.ncbi.nih.gov/pub/taxonomy/new_taxdump/new_taxdump.tar.gz"    
-    if not path: path=str(Path(basedir,"taxdump"))
-    download_extract(urls,path)
-    
-    #cleanup
-    for i in os.listdir(path):
-        if i=="names.dmp":
-            names=str(Path(path,i))
-        elif i=="rankedlineage.dmp":
-            lineages=str(Path(path,i))
-
-    return names,lineages
 
 def download_ncbi_taxdump(path=False):
 
